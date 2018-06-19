@@ -10,44 +10,57 @@ import {
   ActivityIndicator,
   Image
 } from "react-native";
+import HeaderButtons from "react-navigation-header-buttons";
+import Icon from "react-native-vector-icons/Ionicons";
 
-import {auth, database, provider} from "firebase";
+import {StackNavigator} from "react-navigation";
+
+import {auth, database, provider} from "./firebase";
 import TempChart from "./TempChart";
 
 export default class TelemetryPage extends Component<{}> {
   constructor(props) {
     super(props);
     this.state = {
-      tempData: [],
       currentAmbientTemp: 0,
-      currentUnitOneWaterTemp: 0,
+      currentWaterTemp: 0,
+      currentWaterLevel: 0,
       latestUpdate: ""
     };
     this.getData("original-hydro");
   }
+
+  formatDate(date) {
+    var formattedDateString =
+      date.slice(0, 4) +
+      "/" +
+      date.slice(4, 6) +
+      "/" +
+      date.slice(6, 8) +
+      " " +
+      date.slice(8, 10) +
+      ":" +
+      date.slice(10, 12);
+    return formattedDateString;
+  }
+
   getData(deviceName) {
     var db = database;
     db
       .collection("devices")
       .doc(deviceName)
-      .collection("telemetry")
+      .collection("currentState")
+      .doc("sensorData")
       .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          let temp = doc.data().unitOneWaterTemp;
-          console.log(doc.id, " => ", doc.data().unitTwoAmbientTemp);
-          if (doc.data().time >= this.state.latestUpdate) {
-            this.setState(previousState => {
-              return {
-                latestUpdate: doc.data().time,
-                currentAmbientTemp: doc.data().unitTwoAmbientTemp,
-                currentUnitOneWaterTemp: temp
-              };
-            });
-          }
-          this.setState(previousState => {
-            return {tempData: [...previousState.tempData]};
-          });
+      .then(data => {
+        var updateDate = this.formatDate(data.data().time);
+        this.setState(() => {
+          return {
+            latestUpdate: updateDate,
+            currentAmbientTemp: data.data().ambientTemp,
+            currentWaterTemp: data.data().waterTemp,
+            currentWaterLevel: data.data().waterLevel
+          };
         });
       })
       .catch(err => {
@@ -55,8 +68,19 @@ export default class TelemetryPage extends Component<{}> {
       });
   }
 
-  static navigationOptions = {
-    title: "Sensor Data"
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: "How am I doing?",
+      headerRight: (
+        <HeaderButtons IconComponent={Icon} iconSize={23} color="white">
+          <HeaderButtons.Item
+            title="Settings"
+            iconName="ios-settings"
+            onPress={() => navigation.navigate("Settings")}
+          />
+        </HeaderButtons>
+      )
+    };
   };
 
   render() {
@@ -67,12 +91,14 @@ export default class TelemetryPage extends Component<{}> {
         <Text> Track sensor reading and state of device </Text>
 
         <Text style={styles.sensorFormat}>
-          Ambient Temp: {this.state.currentAmbientTemp}
+          Ambient Temp: {this.state.currentAmbientTemp} &#8451;
         </Text>
         <Text style={styles.sensorFormat}>
-          Unit One Water Temp: {this.state.currentUnitOneWaterTemp}
+          Water Temp: {this.state.currentWaterTemp} &#8451;
         </Text>
-        <Text style={styles.sensorFormat}>Unit One Water Level:</Text>
+        <Text style={styles.sensorFormat}>
+          Water Level: {this.state.currentWaterLevel}
+        </Text>
         <Text style={{marginTop: 10}}>
           Last Updated: {this.state.latestUpdate}
         </Text>
