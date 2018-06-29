@@ -12,7 +12,7 @@ import {
   SegmentedControlIOS
 } from "react-native";
 
-import {auth, database, provider} from "./firebase";
+import {auth, database, provider} from "../firebase";
 
 import HeaderButtons from "react-navigation-header-buttons";
 import Icon from "react-native-vector-icons/Ionicons";

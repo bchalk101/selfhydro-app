@@ -1,15 +1,19 @@
 "use strict";
-import React from "react";
+import React, {Component} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {StackNavigator} from "react-navigation";
+import {Provider} from "react-redux";
+import configureStore from "./src/store/configureStore"; //Import the store
 
 const firebase = require("firebase");
 require("firebase/firestore");
 
-import TelemetryPage from "./TelemetryPage";
-import SettingsPage from "./SettingsPage";
+import TelemetryPage from "./src/containers/TelemetryPage";
+import SettingsPage from "./src/containers/SettingsPage";
 
-const App = StackNavigator(
+const store = configureStore();
+
+export const Navigator = StackNavigator(
   {
     Telemetry: {screen: TelemetryPage},
     Settings: {screen: SettingsPage}
@@ -28,4 +32,13 @@ const App = StackNavigator(
     }
   }
 );
-export default App;
+
+export default class App extends Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Navigator />
+      </Provider>
+    );
+  }
+}

@@ -26,6 +26,8 @@
     "react-native-svg": "^6.3.1",
     "react-native-svg-charts": "^4.2.0",
     "react-navigation": "^1.5.8",
-    "react-navigation-header-buttons": "^0.0.5"
+    "react-navigation-header-buttons": "^0.0.5",
+    "react-redux": "^5.0.7",
+    "redux-thunk": "^2.3.0"
   }
 }
