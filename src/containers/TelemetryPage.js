@@ -24,13 +24,7 @@ import {auth, database, provider} from "../firebase";
 export class TelemetryPage extends Component<{}> {
   constructor(props) {
     super(props);
-    this.state = {
-      // currentAmbientTemp: 0,
-      // currentWaterTemp: 0,
-      // currentWaterLevel: 0,
-      // latestUpdate: ""
-    };
-    // this.getData("original-hydro");
+    this.state = {};
   }
 
   componentDidMount() {
@@ -40,12 +34,13 @@ export class TelemetryPage extends Component<{}> {
   static navigationOptions = ({navigation}) => {
     return {
       headerTitle: "How am I doing?",
+      drawerLabel: "Device Telemetry",
       headerRight: (
         <HeaderButtons IconComponent={Icon} iconSize={23} color="white">
           <HeaderButtons.Item
             title="Settings"
             iconName="ios-settings"
-            onPress={() => navigation.navigate("Settings")}
+            onPress={() => navigation.navigate("settingsPage")}
           />
         </HeaderButtons>
       )

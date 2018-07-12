@@ -1,5 +1,15 @@
 {
-  "expo": {
-    "sdkVersion": "25.0.0"
-  }
-}
+   "expo": {
+    "name": "Self Hydro",
+    "icon": "./src/img/icon/app-icon.png",
+    "version": "1.0.0",
+    "slug": "selfhydro",
+    "sdkVersion": "25.0.0",
+    "ios": {
+      "bundleIdentifier": "com.bchalk.selfhydro"
+    },
+    "android": {
+      "package": "com.bchalk.selfhydro"
+    }
+   }
+ }

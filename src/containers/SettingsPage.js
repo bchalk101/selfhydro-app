@@ -35,7 +35,7 @@ export default class SettingsPage extends Component<{}> {
   static navigationOptions = ({navigation}) => {
     const state = navigation.state || {};
     return {
-      headerTitle: "How do you want to set me up?",
+      headerTitle: "My Settings",
       headerRight: (
         <HeaderButtons IconComponent={Icon} iconSize={23} color="white">
           <HeaderButtons.Item
